@@ -37,7 +37,7 @@
   @keyframes pulse { 50% { opacity: 0.5; } }
   .game-area { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; padding-top: 80px; padding-bottom: 100px; }
   .tubes-container { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; align-content: center; gap: 12px; padding: 20px; }
-  .tube { position: relative; width: 56px; height: 200px; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border: 2px solid rgba(255,255,255,0.25); border-top: none; border-radius: 0 0 28px 28px; display: flex; flex-direction: column-reverse; overflow: hidden; cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.4); }
+  .tube { position: relative; width: 52px; height: 180px; background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)); border: 2px solid rgba(255,255,255,0.25); border-top: none; border-radius: 0 0 28px 28px; display: flex; flex-direction: column-reverse; overflow: hidden; cursor: pointer; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: inset 0 0 20px rgba(255,255,255,0.05), 0 8px 20px rgba(0,0,0,0.4); }
   .tube::before { content: ''; position: absolute; top: -8px; left: -4px; right: -4px; height: 8px; background: linear-gradient(180deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1)); border-radius: 4px 4px 0 0; border: 2px solid rgba(255,255,255,0.25); border-bottom: none; }
   .tube::after { content: ''; position: absolute; top: 0; left: 4px; width: 4px; bottom: 0; background: linear-gradient(180deg, rgba(255,255,255,0.3), transparent); border-radius: 2px; pointer-events: none; }
   .tube.selected { transform: translateY(-20px) scale(1.05); border-color: #00f5ff; box-shadow: 0 0 30px rgba(0,245,255,0.6), inset 0 0 20px rgba(0,245,255,0.2); }
@@ -86,7 +86,7 @@
   ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
   .toast { position: fixed; top: 100px; left: 50%; transform: translateX(-50%); padding: 12px 24px; background: rgba(0,245,255,0.9); color: #000; font-weight: 800; border: 2px solid #fff; border-radius: 12px; z-index: 200; opacity: 0; transition: all 0.3s; pointer-events: none; box-shadow: 0 0 20px #00f5ff; text-align: center; }
   .toast.show { opacity: 1; top: 120px; }
-  @media (max-width: 480px) { .tube { width: 48px; height: 170px; } .logo { font-size: 2rem; } .btn { padding: 12px 24px; font-size: 0.9rem; } .stat-pill { padding: 4px 10px; font-size: 0.8rem; } }
+  @media (max-width: 480px) { .tube { width: 44px; height: 160px; } .logo { font-size: 2rem; } .btn { padding: 12px 24px; font-size: 0.9rem; } .stat-pill { padding: 4px 10px; font-size: 0.8rem; } }
 </style>
 </head>
 <body>
@@ -333,7 +333,7 @@ function showInterstitialAd() {
   }
 }
 
-// ========== ESTADO DEL JUEGO ==========
+// ========== ESTADO DEL JUEGO CON GUARDADO AUTOMÁTICO ==========
 const State = {
   coins: 0, bestLevel: 1, currentLevel: 1, levelStars: {},
   equippedSkin: 'neon', ownedSkins: ['neon'],
@@ -343,17 +343,39 @@ const State = {
 };
 
 const SKINS = [
-  { id: 'neon', name: { es: 'Tubo Neón', en: 'Neon Tube' }, price: 0, colors: ['#00f5ff','#ff00e6','#ffea00','#38ef7d','#ff6b6b','#a855f7'] },
-  { id: 'quantum', name: { es: 'Matraz Cuántico', en: 'Quantum Flask' }, price: 100, colors: ['#6366f1','#ec4899','#f59e0b','#10b981','#ef4443','#8b5cf6'] },
-  { id: 'toxic', name: { es: 'Reactor Tóxico', en: 'Toxic Reactor' }, price: 250, colors: ['#84cc16','#22d3ee','#f97316','#e879f9','#facc15','#14b8a6'] },
-  { id: 'plasma', name: { es: 'Plasma Cósmico', en: 'Cosmic Plasma' }, price: 500, colors: ['#f472b6','#60a5fa','#fbbf24','#34d399','#fb7185','#c084fc'] },
-  { id: 'void', name: { es: 'Materia Oscura', en: 'Dark Matter' }, price: 1000, colors: ['#1e293b','#7c3aed','#dc2626','#0891b2','#c026d3','#ea580c'] },
-  { id: 'rainbow', name: { es: 'Arcoíris Mágico', en: 'Magic Rainbow' }, price: 2000, colors: ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#a855f7'] },
+  { id: 'neon', name: { es: 'Tubo Neón', en: 'Neon Tube' }, price: 0, colors: ['#00f5ff','#ff00e6','#ffea00','#38ef7d','#ff6b6b','#a855f7','#ff9f43','#54a0ff'] },
+  { id: 'quantum', name: { es: 'Matraz Cuántico', en: 'Quantum Flask' }, price: 100, colors: ['#6366f1','#ec4899','#f59e0b','#10b981','#ef4443','#8b5cf6','#14b8a6','#f43f5e'] },
+  { id: 'toxic', name: { es: 'Reactor Tóxico', en: 'Toxic Reactor' }, price: 250, colors: ['#84cc16','#22d3ee','#f97316','#e879f9','#facc15','#14b8a6','#a855f7','#06b6d4'] },
+  { id: 'plasma', name: { es: 'Plasma Cósmico', en: 'Cosmic Plasma' }, price: 500, colors: ['#f472b6','#60a5fa','#fbbf24','#34d399','#fb7185','#c084fc','#38bdf8','#facc15'] },
+  { id: 'void', name: { es: 'Materia Oscura', en: 'Dark Matter' }, price: 1000, colors: ['#1e293b','#7c3aed','#dc2626','#0891b2','#c026d3','#ea580c','#16a34a','#ca8a04'] },
+  { id: 'rainbow', name: { es: 'Arcoíris Mágico', en: 'Magic Rainbow' }, price: 2000, colors: ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#a855f7','#ec4899','#06b6d4'] },
 ];
 const TUBE_CAPACITY = 4;
 
-function save() { try { localStorage.setItem('madSciencePro', JSON.stringify({ coins: State.coins, bestLevel: State.bestLevel, levelStars: State.levelStars, equippedSkin: State.equippedSkin, ownedSkins: State.ownedSkins })); } catch(e){} }
-function load() { try { const d = JSON.parse(localStorage.getItem('madSciencePro') || '{}'); if (d.coins !== undefined) State.coins = d.coins; if (d.bestLevel !== undefined) State.bestLevel = d.bestLevel; if (d.levelStars) State.levelStars = d.levelStars; if (d.equippedSkin) State.equippedSkin = d.equippedSkin; if (d.ownedSkins) State.ownedSkins = d.ownedSkins; } catch(e){} }
+function save() { 
+  try { 
+    localStorage.setItem('madSciencePro', JSON.stringify({ 
+      coins: State.coins, 
+      bestLevel: State.bestLevel, 
+      currentLevel: State.currentLevel, 
+      levelStars: State.levelStars, 
+      equippedSkin: State.equippedSkin, 
+      ownedSkins: State.ownedSkins 
+    })); 
+  } catch(e){} 
+}
+
+function load() { 
+  try { 
+    const d = JSON.parse(localStorage.getItem('madSciencePro') || '{}'); 
+    if (d.coins !== undefined) State.coins = d.coins; 
+    if (d.bestLevel !== undefined) State.bestLevel = d.bestLevel; 
+    if (d.currentLevel !== undefined) State.currentLevel = d.currentLevel; 
+    if (d.levelStars) State.levelStars = d.levelStars; 
+    if (d.equippedSkin) State.equippedSkin = d.equippedSkin; 
+    if (d.ownedSkins) State.ownedSkins = d.ownedSkins; 
+  } catch(e){} 
+}
 
 function $(id) { return document.getElementById(id); }
 function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); }
@@ -368,21 +390,47 @@ function updateCoinsUI() {
   $('menuBest').textContent = lvlText + State.bestLevel; 
 }
 
+// ========== SISTEMA DE DIFICULTAD ESCALABLE Y PROGRESIVA ==========
 function generateLevel(levelNum) {
-  const numColors = Math.min(3 + Math.floor((levelNum - 1) / 3), 8);
-  const numEmpty = levelNum < 5 ? 2 : (levelNum < 15 ? 1 : (Math.random() < 0.5 ? 2 : 1));
-  const time = Math.max(90 - levelNum * 2, 30);
+  // Número de colores incrementa con el nivel (de 3 a 8 colores)
+  const numColors = Math.min(3 + Math.floor((levelNum - 1) / 2), 8);
+  
+  // Nivel de vacíos: Nivel 1-3 da 2 vacíos; Nivel 4+ solo da 1 vacío (con chance aleatorio de 2)
+  const numEmpty = levelNum <= 3 ? 2 : (levelNum % 5 === 0 ? 2 : 1);
+  
+  // Tiempo decreciente a medida que sube el nivel (mínimo 35 segundos)
+  const time = Math.max(100 - (levelNum * 3), 35);
+  
   const skin = SKINS.find(s => s.id === State.equippedSkin) || SKINS[0];
   const colors = skin.colors.slice(0, numColors);
   const liquids = [];
+  
   colors.forEach(c => { for (let i = 0; i < TUBE_CAPACITY; i++) liquids.push(c); });
-  for (let i = liquids.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [liquids[i], liquids[j]] = [liquids[j], liquids[i]]; }
+  
+  // Mezclado progresivamente más caótico según el nivel
+  const mixShuffles = 10 + (levelNum * 5);
+  for (let s = 0; s < mixShuffles; s++) {
+    for (let i = liquids.length - 1; i > 0; i--) { 
+      const j = Math.floor(Math.random() * (i + 1)); 
+      [liquids[i], liquids[j]] = [liquids[j], liquids[i]]; 
+    }
+  }
+
   const tubes = []; let idx = 0;
-  for (let i = 0; i < numColors; i++) { const tube = []; for (let j = 0; j < TUBE_CAPACITY; j++) tube.push(liquids[idx++]); tubes.push(tube); }
+  for (let i = 0; i < numColors; i++) { 
+    const tube = []; 
+    for (let j = 0; j < TUBE_CAPACITY; j++) tube.push(liquids[idx++]); 
+    tubes.push(tube); 
+  }
   for (let i = 0; i < numEmpty; i++) tubes.push([]);
-  if (isSolved(tubes)) { const t1 = tubes[0], t2 = tubes[1]; if (t1.length && t2.length) [t1[0], t2[0]] = [t2[0], t1[0]]; }
+  
+  if (isSolved(tubes)) { 
+    const t1 = tubes[0], t2 = tubes[1]; 
+    if (t1.length && t2.length) [t1[0], t2[0]] = [t2[0], t1[0]]; 
+  }
   return { tubes, time, numColors, numEmpty };
 }
+
 function isSolved(tubes) { return tubes.every(t => t.length === 0 || (t.length === TUBE_CAPACITY && t.every(c => c === t[0]))); }
 
 function renderTubes() {
@@ -402,6 +450,7 @@ function renderTubes() {
     container.appendChild(el);
   });
 }
+
 function shade(hex, percent) { const num = parseInt(hex.replace('#',''), 16); let r = (num >> 16) + percent; let g = ((num >> 8) & 0x00FF) + percent; let b = (num & 0x0000FF) + percent; r = Math.max(0, Math.min(255, r)); g = Math.max(0, Math.min(255, g)); b = Math.max(0, Math.min(255, b)); return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0'); }
 
 function onTubeClick(idx) {
@@ -518,7 +567,10 @@ function startTimer() {
 }
 
 function startGame(level) {
-  const lvl = level || State.currentLevel; State.currentLevel = lvl;
+  const lvl = level || State.currentLevel; 
+  State.currentLevel = lvl;
+  save(); // Guarda el progreso inmediatamente al iniciar un nivel
+
   const data = generateLevel(lvl); State.tubes = data.tubes; State.maxTime = data.time; State.timeLeft = data.time;
   State.selectedTube = -1; State.history = []; State.combo = 0; State.undosUsed = 0; State.running = true;
   $('hudLevel').textContent = lvl; $('hudTime').textContent = State.timeLeft;
@@ -533,7 +585,12 @@ function winLevel() {
   let stars = 1; if (State.undosUsed === 0) stars = 2; if (State.timeLeft > State.maxTime * 0.5) stars = 3;
   const baseReward = 20 + State.currentLevel * 5; const timeBonus = Math.floor(State.timeLeft * 2); const comboBonus = State.combo * 10; const starBonus = stars * 15; const totalReward = baseReward + timeBonus + comboBonus + starBonus;
   State.coins += totalReward; State.levelStars[State.currentLevel] = Math.max(State.levelStars[State.currentLevel] || 0, stars);
-  if (State.currentLevel >= State.bestLevel) State.bestLevel = State.currentLevel + 1; State.currentLevel++; save(); updateCoinsUI();
+  if (State.currentLevel >= State.bestLevel) State.bestLevel = State.currentLevel + 1; 
+  
+  State.currentLevel++; 
+  save(); // Guardar avance del usuario al ganar
+  updateCoinsUI();
+  
   const starsHtml = [1,2,3].map(i => `<span class="star ${i <= stars ? 'earned' : ''}" style="animation-delay:${i*0.2}s">⭐</span>`).join('');
   const t = i18n[currentLang];
   
@@ -587,6 +644,7 @@ function drawBg() { bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height); bgPa
 
 function spawnCoinBurst(tubeIdx) { const tubes = document.querySelectorAll('.tube'); if (!tubes[tubeIdx]) return; const rect = tubes[tubeIdx].getBoundingClientRect(); for (let i = 0; i < 3; i++) { const coin = document.createElement('div'); coin.className = 'floating-coin'; coin.textContent = '💰'; coin.style.left = (rect.left + rect.width/2) + 'px'; coin.style.top = (rect.top) + 'px'; coin.style.setProperty('--dx', ((Math.random()-0.5) * 80) + 'px'); document.body.appendChild(coin); setTimeout(() => coin.remove(), 1500); } }
 
+// Carga del avance guardado en localStorage al iniciar la aplicación
 load(); updateCoinsUI();
 document.addEventListener('touchstart', () => { for (const k in audioCache) { audioCache[k].play().then(() => audioCache[k].pause()).catch(()=>{}); break; } }, { once: true });
 </script>
